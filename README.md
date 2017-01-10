@@ -1,5 +1,5 @@
 # AnythingNumber
-Vocola extention to parse `&lt;_anything>` variable as an integer
+Vocola extention to parse `<_anything>` variable as an integer
 
 If you've ever created a large range of numbers in Vocola, like
 ```
