@@ -70,28 +70,32 @@ hundreds_regex, thousands_regex, digits_regex, digit_regex = get_number_regex(
   digits
 )
 
-def a_to_one(anything):
+def preprocess(anything):
   if anything.startswith("a hundred") or anything.startswith("a thousand"):
     return "one" + anything[1:]
+  if anything == "to":
+    return "two"
+  if anything == "for":
+    return "four"
   return anything
 
 # Vocola function: AnythingNumber.Validate
 def anything_number_validate(anything):
-  one_thing = a_to_one(anything)
+  something = preprocess(anything)
 
   return bool(
-    hundreds_regex.match(one_thing) or \
-    thousands_regex.match(one_thing) or \
-    digits_regex.match(one_thing)
+    hundreds_regex.match(something) or \
+    thousands_regex.match(something) or \
+    digits_regex.match(something)
   )
 
 # Vocola function: AnythingNumber.Convert
 def anything_number_convert(anything):
   result = None
 
-  one_thing = a_to_one(anything)
+  something = preprocess(anything)
 
-  match = hundreds_regex.match(one_thing)
+  match = hundreds_regex.match(something)
   if match:
     result = pre_hundreds[match.group(1)]
     sub_hundred = match.group(2)
@@ -99,13 +103,13 @@ def anything_number_convert(anything):
       result *= 100
       result += sub_hundreds[sub_hundred]
 
-  match = thousands_regex.match(one_thing)
+  match = thousands_regex.match(something)
   if match:
     result = pre_hundreds[match.group(1)] * 1000
     result += pre_hundreds.get(match.group(2), 0)
 
-  if digits_regex.match(one_thing):
-    matches = digit_regex.findall(one_thing)
+  if digits_regex.match(something):
+    matches = digit_regex.findall(something)
     matching_digits = (str(digits[i]) for i in matches)
     result = int("".join(matching_digits))
 
