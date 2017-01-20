@@ -75,8 +75,12 @@ def preprocess(anything):
     return "one" + anything[1:]
   if anything == "to":
     return "two"
+  if anything.startswith("to "):
+    return "two " + anything[3:]
   if anything == "for":
     return "four"
+  if anything.startswith("for "):
+    return "four " + anything[4:]
   return anything
 
 # Vocola function: AnythingNumber.Validate
